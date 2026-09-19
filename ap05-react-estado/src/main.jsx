@@ -6,7 +6,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css'
 
 const root = createRoot(document.getElementById('root'))
 root.render(
-    <App root={root}/>
+  <App root={root}/>
 )
 
 //permitir que o desenvolver encontre bugs em tempo de desenvolvimento, mas faz com que o componente seja construído 2x (StrictMode)
