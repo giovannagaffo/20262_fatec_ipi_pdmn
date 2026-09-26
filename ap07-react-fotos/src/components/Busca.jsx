@@ -4,6 +4,7 @@ import { Button } from '@primereact/ui/button'
 import { Search } from '@primeicons/react/search'
 import { IconField } from '@primereact/ui/iconfield'
 import { InputText } from '@primereact/ui/inputtext'
+
 export default class Busca extends Component {
 
     state = {
