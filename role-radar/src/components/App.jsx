@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Creditos from './creditos'
 import Cartao from './cartao'
 import Loading from './Loading'
+import MeuPonto from './MeuPonto'
 
 export default class App extends Component {
   state = {
@@ -16,8 +17,14 @@ export default class App extends Component {
     this.obterLocalizacao()
   }
 
-  // b) Define o método obterLocalizacao
   obterLocalizacao = () => {
+    this.setState({
+      latitude: null,
+      longitude: null,
+      horarioLocalizacao: null,
+      mensagemDeErro: null
+    })
+
     window.navigator.geolocation.getCurrentPosition(
       (position) => {
         this.setState({
@@ -68,9 +75,14 @@ export default class App extends Component {
             !this.state.latitude ?
               <Loading mensagem="Aguardando permissão de localização..." />
             :
-              <p className="text-center font-medium">
-                Localização obtida: {this.state.latitude}, {this.state.longitude}
-              </p>
+              <Cartao cabecalho="Você está aqui">
+                <MeuPonto 
+                  latitude={this.state.latitude}
+                  longitude={this.state.longitude}
+                  horarioLocalizacao={this.state.horarioLocalizacao}
+                  onAtualizar={this.obterLocalizacao}
+                />
+              </Cartao>
           }
         </div>
 
