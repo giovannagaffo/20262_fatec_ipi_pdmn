@@ -3,6 +3,7 @@ import Creditos from './creditos'
 import Cartao from './cartao'
 import Loading from './Loading'
 import MeuPonto from './MeuPonto'
+import Busca from './Busca'
 import geoapifyClient from '../utils/geoapifyClient'
 
 export default class App extends Component {
@@ -103,15 +104,10 @@ export default class App extends Component {
                   />
                 </Cartao>
 
-                { }
-                <div className="mt-3">
-                  <button 
-                    onClick={() => this.onBuscaRealizada('catering.cafe', 1000)}
-                    className="p-button p-component w-full flex align-items-center justify-content-center gap-2"
-                  >
-                    <i className="pi pi-search"></i>
-                    <span>Testar busca</span>
-                  </button>
+                <div className="mt-4">
+                  <Cartao cabecalho="O que você procura?">
+                    <Busca onBuscaRealizada={this.onBuscaRealizada} />
+                  </Cartao>
                 </div>
               </>
           }
