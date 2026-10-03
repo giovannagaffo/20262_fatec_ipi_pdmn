@@ -4,6 +4,7 @@ import Cartao from './cartao'
 import Loading from './Loading'
 import MeuPonto from './MeuPonto'
 import Busca from './Busca'
+import ListaLugares from './Listalugares'
 import geoapifyClient from '../utils/geoapifyClient'
 
 export default class App extends Component {
@@ -11,7 +12,8 @@ export default class App extends Component {
     latitude: null,
     longitude: null,
     horarioLocalizacao: null,
-    mensagemDeErro: null
+    mensagemDeErro: null,
+    lugares: null
   }
 
   componentDidMount() {
@@ -24,7 +26,8 @@ export default class App extends Component {
       latitude: null,
       longitude: null,
       horarioLocalizacao: null,
-      mensagemDeErro: null
+      mensagemDeErro: null,
+      lugares: null
     })
 
     window.navigator.geolocation.getCurrentPosition(
@@ -56,7 +59,7 @@ export default class App extends Component {
           limit: 20
         }
       })
-      console.log(resposta.data.features)
+      this.setState({ lugares: resposta.data.features })
     } catch (erro) {
       console.error('Erro ao buscar lugares:', erro)
     }
@@ -76,7 +79,7 @@ export default class App extends Component {
   render() {
     console.log('render')
     return (
-      <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', maxWidth: '600px', margin: '0 auto' }}>
+      <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', maxWidth: '1000px', margin: '0 auto' }}>
         <h1 className="titulo text-center">
           <i className="pi pi-map-marker mr-2"></i> RolêRadar
         </h1>
@@ -94,22 +97,40 @@ export default class App extends Component {
             !this.state.latitude ?
               <Loading mensagem="Aguardando permissão de localização..." />
             :
-              <>
-                <Cartao cabecalho="Você está aqui">
-                  <MeuPonto 
-                    latitude={this.state.latitude}
-                    longitude={this.state.longitude}
-                    horarioLocalizacao={this.state.horarioLocalizacao}
-                    onAtualizar={this.obterLocalizacao}
-                  />
-                </Cartao>
-
-                <div className="mt-4">
-                  <Cartao cabecalho="O que você procura?">
-                    <Busca onBuscaRealizada={this.onBuscaRealizada} />
+              <div className="grid">
+                <div className="col-12 md:col-6">
+                  <Cartao cabecalho="Você está aqui">
+                    <MeuPonto 
+                      latitude={this.state.latitude}
+                      longitude={this.state.longitude}
+                      horarioLocalizacao={this.state.horarioLocalizacao}
+                      onAtualizar={this.obterLocalizacao}
+                    />
                   </Cartao>
+
+                  <div className="mt-4">
+                    <Cartao cabecalho="O que você procura?">
+                      <Busca onBuscaRealizada={this.onBuscaRealizada} />
+                    </Cartao>
+                  </div>
                 </div>
-              </>
+
+                <div className="col-12 md:col-6">
+                  {
+                    this.state.lugares === null ?
+                      <div className="text-center text-600 p-5">
+                        Nenhuma busca feita ainda.
+                      </div>
+                    :
+                    this.state.lugares.length === 0 ?
+                      <div className="text-center text-600 p-5">
+                        Nenhum lugar encontrado. Tente aumentar o raio.
+                      </div>
+                    :
+                      <ListaLugares lugares={this.state.lugares} />
+                  }
+                </div>
+              </div>
           }
         </div>
 
