@@ -1,10 +1,16 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
 import App from './components/App.jsx'
+import { PrimeReactProvider } from '@primereact/core'
+import Aura from '@primeuix/themes/aura'
+import 'primeflex/primeflex.min.css'
+import 'primeicons/primeicons.css'
 import './styles.css'
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <PrimeReactProvider value={{ theme: { preset: Aura } }}>
+      <App />
+    </PrimeReactProvider>
+  </StrictMode>
 )

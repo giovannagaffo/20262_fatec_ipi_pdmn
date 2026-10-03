@@ -1,3 +1,4 @@
+import 'primeicons/primeicons.css'
 import React from 'react'
 
 const App = () => {
@@ -14,7 +15,9 @@ const App = () => {
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <h1 className="titulo">RolêRadar</h1>
+      <h1 className="titulo">
+        <i className="pi pi-map-marker mr-2"></i> RolêRadar
+      </h1>
       <p style={estilosSubstitulo}>Descubra o que existe perto de você</p>
 
       <hr style={{ margin: '40px 0', border: '0', borderTop: '1px solid #ddd' }} />
