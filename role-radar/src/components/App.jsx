@@ -3,6 +3,7 @@ import Creditos from './creditos'
 import Cartao from './cartao'
 import Loading from './Loading'
 import MeuPonto from './MeuPonto'
+import geoapifyClient from '../utils/geoapifyClient'
 
 export default class App extends Component {
   state = {
@@ -43,6 +44,23 @@ export default class App extends Component {
     )
   }
 
+  onBuscaRealizada = async (categoria, raio) => {
+    const { longitude, latitude } = this.state
+    try {
+      const resposta = await geoapifyClient.get('/places', {
+        params: {
+          categories: categoria,
+          filter: `circle:${longitude},${latitude},${raio}`,
+          bias: `proximity:${longitude},${latitude}`,
+          limit: 20
+        }
+      })
+      console.log(resposta.data.features)
+    } catch (erro) {
+      console.error('Erro ao buscar lugares:', erro)
+    }
+  }
+
   estilosSubstitulo = {
     textAlign: 'center',
     color: '#666',
@@ -75,14 +93,27 @@ export default class App extends Component {
             !this.state.latitude ?
               <Loading mensagem="Aguardando permissão de localização..." />
             :
-              <Cartao cabecalho="Você está aqui">
-                <MeuPonto 
-                  latitude={this.state.latitude}
-                  longitude={this.state.longitude}
-                  horarioLocalizacao={this.state.horarioLocalizacao}
-                  onAtualizar={this.obterLocalizacao}
-                />
-              </Cartao>
+              <>
+                <Cartao cabecalho="Você está aqui">
+                  <MeuPonto 
+                    latitude={this.state.latitude}
+                    longitude={this.state.longitude}
+                    horarioLocalizacao={this.state.horarioLocalizacao}
+                    onAtualizar={this.obterLocalizacao}
+                  />
+                </Cartao>
+
+                { }
+                <div className="mt-3">
+                  <button 
+                    onClick={() => this.onBuscaRealizada('catering.cafe', 1000)}
+                    className="p-button p-component w-full flex align-items-center justify-content-center gap-2"
+                  >
+                    <i className="pi pi-search"></i>
+                    <span>Testar busca</span>
+                  </button>
+                </div>
+              </>
           }
         </div>
 
